@@ -1,0 +1,30 @@
+<div class="row" style="margin-top: 20px; margin-left: 20px;">
+    <div class="col-md-6" style="text-align: center;">
+      <form [formGroup]="blogForm" (ngSubmit)="submitForm()" class="ui large form segment">
+          <h3 class="ui header">New Blog</h3><br>
+          <div class="mb-3">
+            <label for="id" class="form-label">ID: </label>
+            <input formControlName="id" name="id" class="form-control">
+            <small *ngIf="id.invalid && id.touched" class="text-danger">ID is required. (number only)</small>
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title: </label>
+            <input formControlName="title" name="title" class="form-control">
+            <small *ngIf="title.invalid && title.touched" class="text-danger">Title is required. (minimum 10 characters)</small>
+          </div>
+          <div class="mb-3">
+            <label for="author" class="form-label">Author: </label>
+            <input formControlName="author" name="author" class="form-control" placeholder="e.g. Created By">
+            <small *ngIf="author.invalid && author.touched" class="text-danger">Author is required. (minimum 10 characters)</small>
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Content: </label>
+            <input formControlName="body" name="body" class="form-control" placeholder="e.g. Add some text here ...">
+            <small *ngIf="body.invalid && body.touched" class="text-danger">Content is required. (minimum 100 characters)</small>
+          </div>
+          <button [disabled]="blogForm.invalid" type="submit" name="submit" class="btn btn-success w-100">
+            Add
+          </button>
+      </form>
+    </div>
+</div>

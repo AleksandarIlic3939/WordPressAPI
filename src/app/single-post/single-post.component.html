@@ -7,7 +7,7 @@
                 <section class="post" *ngIf="singlePost">
                     <br>
                     <header class="post-header">
-                        <h2 class="post-title" [innerHTML]="singlePost.title.rendered"></h2>
+                        <h2 class="post-title" [innerHTML]="singlePost.title.rendered" style="margin-bottom: 50px;"></h2>
                         <p class="post-meta">
                             By <a href="{{getLink()}}" target="_blank" class="post-author">{{getDomain(singlePost.link)}}</a> Date
                             <a routerLink="/posts">{{singlePost.date | date:'short'}}</a>

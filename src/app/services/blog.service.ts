@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Blog } from '../models/blog';
 
 @Injectable({
@@ -9,47 +9,34 @@ import { Blog } from '../models/blog';
 })
 export class BlogService {
 
-  public baseUrl = 'https://www.wpbeginner.com/';
+  public baseUrl = 'http://localhost:3000/blogPosts';
 
   constructor(private _httpClient: HttpClient) { }
 
   public getPosts() : Observable<Blog[]> {
-    const url = `${this.baseUrl}/wp-json/wp/v2/posts`;
-    console.log(url);
-    return this._httpClient.get(url).pipe(catchError(this.errorHandler));
+    return this._httpClient.get(this.baseUrl).pipe(map((data: any[]) => data.map((item: any) => this._createPostFromObject(item))),);
   }
 
-  public getSinglePost(id: any) : Observable<Blog> {
-    const url = `${this.baseUrl}/wp-json/wp/v2/posts/${id}`;
-    console.log(url);
-    return this._httpClient.get(url).pipe(catchError(this.errorHandler));
+  public getPost(id: number) : Observable<Blog> {
+    return this._httpClient.get(this.baseUrl + '/' + id).pipe(
+    map((data: any) => this._createPostFromObject(data)),
+    );
   }
 
-  public deletePost(id: any) : Observable<Blog> {
-    const url = `${this.baseUrl}/wp-json/wp/v2/posts/${id}`;
-    console.log(url);
-    return this._httpClient.delete(url).pipe(
-      map((data: any) => this._createPostFromObject(data)),
+  public deletePost(id: number) : Observable<Blog> {
+    return this._httpClient.delete(this.baseUrl + '/' + id).pipe(
+    map((data: any) => this._createPostFromObject(data)),
+    );
+  }
+
+  public createPost(blog: Blog) : Observable<Blog> {
+    return this._httpClient.post(this.baseUrl, blog).pipe(
+    map((data: any) => this._createPostFromObject(data)),
     );
   }
 
   private _createPostFromObject(item: any) {
-    return new Blog();
-  }
-
-  public errorHandler(error: HttpErrorResponse) {
-    return new Observable((observer: Observer<any>) => {
-      observer.error(error);
-    })
-  }
-
-  public domainHandler(link: any): string {
-    try {
-        const domainAndPath: string = link.split('//')[1];
-        return domainAndPath.split('/')[0];
-    } catch (err) {
-        return "null";
-    }
+    return new Blog(item.id, item.date, item.title, item.author, item.body);
   }
 
 }

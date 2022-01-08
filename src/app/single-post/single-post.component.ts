@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlogService } from '../services/blog.service';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-single-post',
@@ -13,7 +13,7 @@ export class SinglePostComponent implements OnInit {
   singlePost: any;
   errorMessage: any;
 
-  constructor(private _route: ActivatedRoute, private _blogService: BlogService) { }
+  constructor(private _route: ActivatedRoute, private _postService: PostService) { }
 
   ngOnInit(): void {
     this.id = this._route.snapshot.paramMap.get('id') as string;
@@ -23,7 +23,7 @@ export class SinglePostComponent implements OnInit {
 
   private getSinglePost() {
 
-    this._blogService.getSinglePost(this.id).subscribe(
+    this._postService.getSinglePost(this.id).subscribe(
       (data: any) => {
         this.singlePost = data;
         console.log(this.singlePost);
@@ -37,11 +37,11 @@ export class SinglePostComponent implements OnInit {
   }
 
   public getDomain(link: any): string {
-    return this._blogService.domainHandler(link);
+    return this._postService.domainHandler(link);
   }
 
   public getLink(): string {
-    return this._blogService.baseUrl;
+    return this._postService.baseUrl;
   }
 
 }
